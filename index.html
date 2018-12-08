@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  </head>
+    <body>
+
+    <!-- Modal -->
+
+    <div id="introModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Welcome to the best Hangman game!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Tap the letter that you want to guess, and if it is correct, it will appear in the word.</p> <p>Good luck!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Let's Play!</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="jumbotron">
+              <h1>The Best Hangman Game Evar!</h1>
+              <h3 class="text-center">Tap on the letter you want to guess. Below is the word:</h3>
+              <h2 class="text-center"><span id="hangWord"><strong> </strong></span></h2>
+            </div>
+            <div class="container">
+                <div class="row">
+                  <div class="col-md-4">
+                    <h2 class="text-center">You Guessed</h2>
+                    <h1 class="text-center" id="myPickTxt"></h1>
+                  </div>
+                  <div class="col-md-4">
+                    <h2 class="text-center">Guesses Remaining</h2>
+                    <h1 class="text-center" id="guessesRem"></h1>
+                </div>
+                  <div class="col-md-4">
+                    <h2 class="text-center">Previous Guesses</h2>
+                    <h1 id="prevGuesses"></h1>
+                  </div>
+                </div>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+
+        $(document).ready(function(){
+            $("#introModal").css("display", "block");
+            $("#guessesRem").text(chancesLeft.toString());
+            $("#hangWord").text(words[0].replace(/[a-z]/g, "_ "));
+        });
+        
+        $(".btn-primary").on("click", function(){
+          $("#introModal").css("display", "none");
+        });
+
+        $(".btn-secondary").on("click", function(){
+          window.location.replace("https://www.msn.com/");
+        });
+
+        words = ["hanging" , "tough", "new" , "kids", "block"];
+
+
+        var correctPickCount = 0;
+        var chancesLeft = 6;
+        var allPicks = [];
+
+        document.onkeyup = function(event) {
+          
+          var myPick = event.key;
+          var currWord = $("#hangWord").toString();
+          var positions = [];
+
+          for (var i = 0; i < currWord.length; i++) {
+                if(selectableWords[currentWordIndex][i] === myPick) {
+                positions.push(i);
+              }
+          }
+          
+
+          myPickTxt.textContent = myPick;
+          allPicks.push(myPick);
+          prevGuesses.textContent = allPicks.join(" ");
+        }
+
+      </script>
+    </body>
+</html>
