@@ -61,39 +61,83 @@
 
       <script type="text/javascript">
 
-        $(document).ready(function(){
-            $("#introModal").css("display", "block");
-            $("#guessesRem").text(chancesLeft.toString());
-            $("#hangWord").text(words[0].replace(/[a-z]/g, "_ "));
-        });
-        
-        $(".btn-primary").on("click", function(){
-          $("#introModal").css("display", "none");
-        });
+        wordsArray = ["hanging" , "tough", "new" , "kids", "block"];
+        var randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
 
-        $(".btn-secondary").on("click", function(){
-          window.location.replace("https://www.msn.com/");
-        });
-
-        words = ["hanging" , "tough", "new" , "kids", "block"];
-
-
+        var answerArray = [];
         var correctPickCount = 0;
         var chancesLeft = 6;
         var allPicks = [];
 
+
+        $(document).ready(function(){
+            $("#introModal").css("display", "block");
+            $("#guessesRem").text(chancesLeft.toString());
+
+        });
+
+
+        $(".btn-primary").on("click", function(){
+
+          correctPickCount = 0;
+          chancesLeft = 6;
+          answerArray.length = 0;
+          allPicks.length = 0;
+          $("#myPickTxt").text("");
+          $("#guessesRem").text(chancesLeft.toString());
+          $("#prevGuesses").text(allPicks.toString());
+          randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
+
+          for (var i = 0; i < randomWord.length; i++) {
+              answerArray.push("_");
+          }
+
+          $("#hangWord").text(answerArray.join(" "));
+
+          $("#introModal").css("display", "none");
+
+          console.log("Here's the secret word: " + randomWord);
+
+
+        });
+
+        $(".btn-secondary").on("click", function(){
+          window.location.href("https://www.msn.com/");
+        });
+
         document.onkeyup = function(event) {
           
           var myPick = event.key;
-          var currWord = $("#hangWord").toString();
-          var positions = [];
-
-          for (var i = 0; i < currWord.length; i++) {
-                if(selectableWords[currentWordIndex][i] === myPick) {
-                positions.push(i);
-              }
-          }
           
+          if(randomWord.indexOf(myPick) != -1){
+
+            correctPickCount++;
+            for(var i=0; i<randomWord.length; i++){
+              if(randomWord[i] == myPick) 
+                answerArray[i] = randomWord[i];
+                $("#hangWord").text(answerArray.join(" "));
+
+            }
+
+          if(correctPickCount == answerArray.length){
+            $(".modal-title").text("Congratulations!");
+            $(".modal-body").text("You won! Let's play again, or cancel");
+            $("#introModal").css("display", "block");
+          }
+
+          } else {
+            chancesLeft--;
+            $("#guessesRem").text(chancesLeft.toString());
+
+          if(chancesLeft == 0){
+            $(".modal-title").text("Sorry!");
+            $(".modal-body").text("You lost! Let's play again, or cancel");
+            $("#introModal").css("display", "block");
+          }
+
+          }
+
+
 
           myPickTxt.textContent = myPick;
           allPicks.push(myPick);
